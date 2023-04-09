@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "467bf5ed-e5db-4e8d-af3b-9a290056041e",
+		"name": "DynamicVarOpenweather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26674412"
+	},
+	"item": [
+		{
+			"name": "DynamicVar",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomLatitude = pm.variables.replaceIn('{{$randomLatitude}}');\r",
+							"var randomLongitude = pm.variables.replaceIn('{{$randomLongitude}}');\r",
+							"\r",
+							"pm.environment.set(\"lat\",randomLatitude);\r",
+							"pm.environment.set(\"lon\",randomLongitude);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"City check\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    if(jsonData.name == \"\"){\r",
+							"        console.log(\"City not found\");\r",
+							"    } else {\r",
+							"        console.log(\"City is found\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/2.5/weather?lat={{lat}}&lon={{lon}}&units=metric&lang=ru",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "{{lat}}"
+						},
+						{
+							"key": "lon",
+							"value": "{{lon}}"
+						},
+						{
+							"key": "units",
+							"value": "metric"
+						},
+						{
+							"key": "lang",
+							"value": "ru"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

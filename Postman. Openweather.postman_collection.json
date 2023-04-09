@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "5c009b05-7139-4c40-ba82-a7b7b2d45663",
+		"name": "Postman. Openweather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26674412"
+	},
+	"item": [
+		{
+			"name": "AppidPositiveCheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct city\", function () {\r",
+							"    var expectedCity = pm.variables.get(\"city\");\r",
+							"\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(expectedCity);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/2.5/weather?q={{city}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "{{city}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AppidNegativeCheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid API key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check error message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.message).to.eql(\"Invalid API key. Please see https://openweathermap.org/faq#error401 for more info.\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{incorrect_appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/2.5/forecast",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"forecast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LangIDParameterForecast",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/2.5/forecast?id=524901&lang=ru",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"forecast"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "524901"
+						},
+						{
+							"key": "lang",
+							"value": "ru"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ZipCoordinates",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is success\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202,203])\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code name has string\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/geo/1.0/zip?zip=E15,GB",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"geo",
+						"1.0",
+						"zip"
+					],
+					"query": [
+						{
+							"key": "zip",
+							"value": "E15,GB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UnitsWeather",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check id and country\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.sys.country).to.eql(\"GB\");\r",
+							"    pm.expect(jsonData.sys.id).to.eql(2031790);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{appid}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "APPID",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/data/2.5/weather?lat=57&lon=-2.15&units=imperial&lang=ru",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "57"
+						},
+						{
+							"key": "lon",
+							"value": "-2.15"
+						},
+						{
+							"key": "units",
+							"value": "imperial"
+						},
+						{
+							"key": "lang",
+							"value": "ru"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
